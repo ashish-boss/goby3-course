@@ -1,4 +1,5 @@
 syntax = "proto2";
+import "dccl/option_extensions.proto";
 
 package goby3_course.protobuf;
 
@@ -10,4 +11,19 @@ message CTDControl
         NOT_LOGGING = 2;
     }
     required DesiredState desired_state = 1;
+}
+
+message CTDSample
+{
+    option (dccl.msg) = {
+        unit_system: "si"
+    };
+
+    required uint32 time = 1 [(dccl.field).units = { base_dimensions: "T" }];
+    required double salinity = 2;
+    required double temperature = 3
+        [(dccl.field).units = { base_dimensions: "K" system: "celsius" }];
+    required double depth = 4 [(dccl.field).units = { base_dimensions: "L" }];
+    required double soundspeed = 5
+        [(dccl.field).units = { base_dimensions: "LT^-1" }];
 }

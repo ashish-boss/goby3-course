@@ -1,7 +1,9 @@
 #include <goby/middleware/marshalling/protobuf.h>
 // this space intentionally left blank
+#include <boost/units/systems/temperature/celsius.hpp>
 #include <goby/middleware/io/line_based/serial.h>
 #include <goby/util/linebasedcomms/nmea_sentence.h>
+#include <goby/util/seawater/soundspeed.h>
 #include <goby/zeromq/application/multi_thread.h>
 
 #include "config.pb.h"
@@ -143,6 +145,32 @@ void goby3_course::apps::CTDDriver::handle_incoming_serial(const goby::util::NME
                 machine_->process_event(statechart::EvLoggingStarted());
             else if (nmea[1] == "STOP")
                 machine_->process_event(statechart::EvEnterSleep());
+        }
+    }
+    else if (nmea.sentence_id() == "DAT")
+    {
+        if (nmea.size() == 4)
+        {
+            enum
+            {
+                SAL = 1,
+                TEMP = 2,
+                DEPTH = 3
+            };
+            goby3_course::protobuf::CTDSample sample;
+            auto depth = nmea.as<double>(DEPTH) * si::meters;
+            auto sal = nmea.as<double>(SAL);
+            auto temp = nmea.as<double>(TEMP) *
+                        boost::units::absolute<boost::units::celsius::temperature>();
+            sample.set_depth_with_units(depth);
+            sample.set_salinity(sal);
+            sample.set_temperature_with_units(temp);
+            sample.set_soundspeed_with_units(
+                goby::util::seawater::mackenzie_soundspeed(temp, sal, depth));
+            sample.set_time_with_units(goby::time::SystemClock::now<goby::time::MicroTime>());
+            glog.is_verbose() && glog << "New CTD Sample: " << sample.ShortDebugString()
+                                      << std::endl;
+            interprocess().publish<groups::ctd_sample>(sample);
         }
     }
 }

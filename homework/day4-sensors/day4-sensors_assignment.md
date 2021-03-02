@@ -89,3 +89,31 @@ TODO: insert log processing instructions.
 ## Wrap up
 
 And that's the week! Thanks for joining us, and I hope you learned some useful tools. 
+
+
+# Solutions (Toby)
+
+My solutions are pushed to the `post-homework4` branch of goby3-course. Please reference the code together with this text.
+
+## Assignment 1: 
+
+First I added code to read the .csv file into a data structure. I stored the values in two maps so that I can use `goby::util::linear_interpolate`:
+
+```cpp
+    // depth -> temperature
+    std::map<quantity<si::length>, quantity<absolute<celsius::temperature>>> temperatures_;
+    // depth -> salinity
+    std::map<quantity<si::length>, double> salinities_;
+```    
+
+Then, I changed the application type from `middleware::MultiThreadStandaloneApplication` to `zeromq::MultiThreadApplication`. At that point, I updated `auv.launch` and `auv.pb.cfg.py` to use a new template file `goby3_course_ctd_simulator.pb.cfg.in`. 
+
+Then, I subscribed to `goby::middleware::frontseat::node_status` for the vehicle depth data. I added a boolean for whether we are streaming data or not, and set to true when we get `$..CMD,START` and false after `$..CMD,STOP`.
+
+I added loop() back in at 1 Hz, and used it to stream when we're streaming. Next I added the requested random variation to each sample.
+
+I then created a CTDSample message in `src/lib/messages/ctd.proto` for use by the driver. I populated it with the data from `$..DAT` and published it (on interprocess) to a new group `ctd_sample`.
+
+
+## Assignment 2: 
+

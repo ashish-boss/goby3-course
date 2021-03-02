@@ -58,6 +58,11 @@ elif common.app == 'goby3_course_ctd_driver':
     print(config.template_substitute(templates_dir+'/goby3_course_ctd_driver.pb.cfg.in',
                                      app_block=app_common,
                                      interprocess_block = interprocess_common))
+elif common.app == 'goby3_course_ctd_simulator':
+    print(config.template_substitute(templates_dir+'/goby3_course_ctd_simulator.pb.cfg.in',
+                                     app_block=app_common,
+                                     interprocess_block = interprocess_common,
+                                     ctd_csv_file=common.goby3_course_root + '/homework/day4-sensors/ctd_data.csv'))
 elif common.app == 'goby_frontseat_interface_basic_simulator':
     print(config.template_substitute(templates_dir+'/frontseat.pb.cfg.in',
                                      moos_port=common.vehicle.moos_port(vehicle_id),

@@ -14,4 +14,6 @@ message CTDSimulator
     optional goby.zeromq.protobuf.InterProcessPortalConfig interprocess = 2;
 
     required goby.middleware.protobuf.PTYConfig serial = 10;
+
+    required string csv_file = 20;
 }
