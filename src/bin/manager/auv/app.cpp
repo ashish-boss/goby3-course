@@ -6,7 +6,9 @@
 #include "config.pb.h"
 #include "goby3-course/groups.h"
 #include "goby3-course/messages/command_dccl.pb.h"
+#include "goby3-course/messages/ctd.pb.h"
 #include "goby3-course/messages/nav_dccl.pb.h"
+
 #include "goby3-course/nav/convert.h"
 #include "goby3-course/nav/intervehicle.h"
 
@@ -28,6 +30,9 @@ class AUVManager : public ApplicationBase
     void subscribe_our_nav();
     void subscribe_usv_nav();
     void subscribe_commands();
+
+  private:
+    boost::units::quantity<boost::units::si::velocity> latest_soundspeed_;
 };
 } // namespace apps
 } // namespace goby3_course
@@ -43,6 +48,11 @@ goby3_course::apps::AUVManager::AUVManager()
     subscribe_our_nav();
     subscribe_usv_nav();
     subscribe_commands();
+
+    interprocess().subscribe<groups::ctd_sample>(
+        [this](const goby3_course::protobuf::CTDSample& sample) {
+            latest_soundspeed_ = sample.soundspeed_with_units();
+        });
 }
 
 void goby3_course::apps::AUVManager::subscribe_our_nav()
@@ -57,7 +67,7 @@ void goby3_course::apps::AUVManager::subscribe_our_nav()
             glog.is_verbose() && glog << group("auv_nav")
                                       << "^^ Converts to DCCL nav: " << dccl_nav.ShortDebugString()
                                       << std::endl;
-
+            dccl_nav.set_soundspeed_with_units(latest_soundspeed_);
             intervehicle().publish<goby3_course::groups::auv_nav>(dccl_nav,
                                                                   goby3_course::nav_publisher());
         });

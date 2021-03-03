@@ -100,5 +100,11 @@ elif common.app == 'goby_moos_gateway':
                                      app_block=app_common,
                                      interprocess_block = interprocess_common,
                                      moos_port=common.vehicle.moos_port(vehicle_id)))
+elif common.app == 'goby_logger':
+    print(config.template_substitute(templates_dir+'/goby_logger.pb.cfg.in',
+                                     app_block=app_common,
+                                     interprocess_block = interprocess_common,
+                                     goby3_course_messages_lib=common.goby3_course_messages_lib,
+                                     goby_logger_dir=debug_log_file_dir))
 else:
     sys.exit('App: {} not defined'.format(common.app))

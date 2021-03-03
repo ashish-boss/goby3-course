@@ -13,44 +13,44 @@ message NavigationReport
         unit_system: "si"
     };
 
-    required int32 vehicle = 1 [(.dccl.field) = {min: 1 max: 128}];
+    required int32 vehicle = 1 [(.dccl.field) = { min: 1 max: 128 }];
     required double time = 2 [(.dccl.field) = {
         codec: "dccl.time2",
-        units {derived_dimensions: "time"}
+        units { derived_dimensions: "time" }
     }];
 
     required double x = 3 [(.dccl.field) = {
         min: -10000
         max: 10000
         precision: 1
-        units {derived_dimensions: "length"}
+        units { derived_dimensions: "length" }
     }];
     required double y = 4 [(.dccl.field) = {
         min: -10000
         max: 10000
         precision: 1
-        units {derived_dimensions: "length"}
+        units { derived_dimensions: "length" }
     }];
 
     required double z = 5 [(.dccl.field) = {
         min: -6000
         max: 0
         precision: 0
-        units {derived_dimensions: "length"}
+        units { derived_dimensions: "length" }
     }];
 
     required double speed_over_ground = 6 [(.dccl.field) = {
         min: 0
         max: 5
         precision: 1
-        units {derived_dimensions: "length/time"}
+        units { derived_dimensions: "length/time" }
     }];
 
     required double heading = 7 [(.dccl.field) = {
         min: 0
         max: 359
         precision: 0
-        units {derived_dimensions: "plane_angle" system: "angle::degree"}
+        units { derived_dimensions: "plane_angle" system: "angle::degree" }
     }];
 
     enum VehicleClass
@@ -61,4 +61,11 @@ message NavigationReport
         OTHER = 4;
     }
     optional VehicleClass type = 8;
+
+    optional double soundspeed = 9 [(.dccl.field) = {
+        min: 1450
+        max: 1550
+        precision: 0
+        units { derived_dimensions: "length/time" }
+    }];
 }

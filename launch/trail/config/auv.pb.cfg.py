@@ -25,7 +25,7 @@ except:
 # compute trail angle as a fan of AUVS from 90 to 270
 trail_angle=90+((270-90)/number_of_auvs)*auv_index
 # space out in depth
-deploy_depth=10+10*auv_index
+deploy_depth=200/number_of_auvs*(auv_index+1)
 
 vehicle_id=auv_index+common.comms.usv_vehicle_id+1
 vehicle_type = 'AUV'

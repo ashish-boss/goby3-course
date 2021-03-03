@@ -1,4 +1,4 @@
-initialize   DEPLOY_STATE = POLYGON
+initialize   DEPLOY_STATE = WAYPOINTS
 initialize   MOOS_MANUAL_OVERRIDE = false
 
 //----------------------------------------------

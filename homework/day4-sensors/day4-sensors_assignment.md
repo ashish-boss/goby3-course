@@ -114,6 +114,74 @@ I added loop() back in at 1 Hz, and used it to stream when we're streaming. Next
 
 I then created a CTDSample message in `src/lib/messages/ctd.proto` for use by the driver. I populated it with the data from `$..DAT` and published it (on interprocess) to a new group `ctd_sample`.
 
+```protobuf
+message CTDSample
+{
+    option (dccl.msg) = {
+        unit_system: "si"
+    };
+
+    required uint32 time = 1 [(dccl.field).units = { base_dimensions: "T" }];
+    required double salinity = 2;
+    required double temperature = 3
+        [(dccl.field).units = { base_dimensions: "K" system: "celsius" }];
+    required double depth = 4 [(dccl.field).units = { base_dimensions: "L" }];
+    required double soundspeed = 5
+        [(dccl.field).units = { base_dimensions: "LT^-1" }];
+}
+```
 
 ## Assignment 2: 
 
+I subscribed to `ctd_sample` in the `goby3_course_auv_manager`, and stored the latest sound speed to a class member variable:
+
+```cpp
+    interprocess().subscribe<groups::ctd_sample>(
+        [this](const goby3_course::protobuf::CTDSample& sample) {
+            latest_soundspeed_ = sample.soundspeed_with_units();
+        });
+```
+
+Then, I added the sound speed field to the NavigationReport:
+
+```protobuf
+message NavigationReport
+{
+// ... 
+    optional double soundspeed = 9 [(.dccl.field) = {
+        min: 1450
+        max: 1550
+        precision: 0
+        units { derived_dimensions: "length/time" }
+    }];
+}
+```
+
+Now, I added the `goby_logger` as requested to the `usv.launch` and affiliated files. After running the mission I collected a 'usv*.goby' log file (usv_29930516T214924.goby). I converted the file to HDF5 and then plotted some figures as requested:
+
+
+```matlab
+load ~/goby3-course/logs/usv/usv_29930516T214924.h5
+close all;
+
+% plot usv x/y
+figure;
+usv_nav = goby3_course__usv_nav_1.goby3_course_dccl_NavigationReport;
+plot(usv_nav.x, usv_nav.y);
+axis equal;
+
+% plot auv depth
+figure;
+auv_nav = goby3_course__auv_nav_2.goby3_course_dccl_NavigationReport;
+plot(auv_nav.z);
+
+% plot ssp 
+figure;
+plot(auv_nav.soundspeed, auv_nav.z, 'o');
+```
+
+The resulting figures are:
+
+<img src=usv-position.png width=50%/>
+<img src=auv-depth.png width=50%/>
+<img src=auv-ssp.png width=50%/>
