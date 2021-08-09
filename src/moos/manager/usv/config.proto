@@ -1,0 +1,16 @@
+syntax = "proto2";
+import "goby/moos/protobuf/goby_moos_app.proto";
+import "goby/protobuf/option_extensions.proto";
+
+package goby3_course.moos.protobuf;
+
+message GobyCourseUSVManagerConfig
+{
+    optional goby.moos.protobuf.GobyMOOSAppConfig common = 1 [
+        (goby.field).description =
+            "Configuration common to all Goby MOOS applications"
+    ];  // see goby_moos_app.proto
+
+    optional int32 vehicle_id = 11;
+    repeated int32 auv_modem_id = 20;
+}

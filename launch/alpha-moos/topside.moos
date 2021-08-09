@@ -1,0 +1,83 @@
+ServerHost   = localhost
+ServerPort   = 9001
+Community    = alpha_topside
+MOOSTimeWarp = 10 
+
+LatOrigin  = 41.592344
+LongOrigin = -70.711260
+
+log=true
+log_path=../../logs/topside
+
+ProcessConfig = ANTLER
+{
+    MSBetweenLaunches=10
+    Run = MOOSDB @ LaunchType=Screen
+    Run = pAcommsHandler @ LaunchType=Screen
+    Run = pMarineViewer @ LaunchType=Screen
+    Run = pGobyCourseTopsideManager @ LaunchType=Screen
+    Run = uProcessWatch @ LaunchType=Screen
+}
+
+ProcessConfig = pMarineViewer
+{
+    AppTick    = 4
+    CommsTick  = 4
+    appcast_viewable     = true
+
+}
+
+ProcessConfig = pAcommsHandler
+{
+    common {
+        verbosity: DEBUG2  show_gui: true
+    }
+    modem_id: 1
+    driver_cfg {
+        driver_type: DRIVER_UDP_MULTICAST
+        [goby.acomms.udp_multicast.protobuf.config] {  
+            multicast_address: "239.142.0.2"
+            multicast_port: 54500
+        }
+    }
+    mac_cfg {
+        type: MAC_FIXED_DECENTRALIZED
+        slot { src: 1 slot_seconds: 10 max_frame_bytes: 128 }
+        slot { src: 2 slot_seconds: 10 max_frame_bytes: 128 }
+    }
+
+    queue_cfg
+    {
+        message_entry { 
+            protobuf_name: "goby3_course.dccl.NavigationReport"
+        }        
+    }
+        
+
+    load_shared_library: "../../build/lib/libgoby3_course_messages.so"
+    translator_entry {
+        protobuf_name: "goby3_course.dccl.NavigationReport"
+        publish {
+            technique: TECHNIQUE_PREFIXED_PROTOBUF_TEXT_FORMAT
+            moos_var: "NAVIGATION_REPORT_IN"
+        }
+    }
+    
+}
+
+ProcessConfig = pGobyCourseTopsideManager
+{
+    usv_modem_id: 2
+    vehicle_name_prefix: "ALPHA_"
+}
+
+
+ProcessConfig = uProcessWatch
+{
+    AppTick   = 4
+    CommsTick = 4
+
+    watch_all = true
+    nowatch   = uPokeDB*
+    nowatch   = uXMS*
+}

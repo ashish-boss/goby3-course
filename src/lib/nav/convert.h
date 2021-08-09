@@ -4,6 +4,8 @@
 #include <goby/middleware/protobuf/frontseat_data.pb.h>
 #include <goby/time/convert.h>
 #include <goby/time/system_clock.h>
+#include <goby/util/geodesy.h>
+#include <ivp/NodeRecord.h>
 
 #include "goby3-course/messages/nav_dccl.pb.h"
 
@@ -113,6 +115,10 @@ nav_convert(const dccl::NavigationReport& dccl_nav, const goby::util::UTMGeodesy
 
     return frontseat_nav;
 }
+
+
+std::string
+node_report_from_nav(const goby::middleware::frontseat::protobuf::NodeStatus& node_status);
 
 } // namespace goby3_course
 
