@@ -1,11 +1,6 @@
-/-------------------------------------------------
-// NAME: M. Benjamin, MIT CSAIL
-// FILE: alpha.moos
-//-------------------------------------------------
-
 ServerHost   = localhost
 ServerPort   = 9000
-Community    = alpha
+Community    = auv
 MOOSTimeWarp = 10 
 
 LatOrigin  = 41.592344
@@ -28,7 +23,7 @@ ProcessConfig = ANTLER
     Run = uProcessWatch @ LaunchType=Screen
     Run = pHelmIvP @ LaunchType=Screen
     Run = pNodeReporter @ LaunchType=Screen
-    Run = pGobyCourseUSVManager @ LaunchType=Screen
+    Run = pGobyCourseAUVManager @ LaunchType=Screen
     Run = iFrontSeat_basic_simulator @ LaunchType=Screen
     
 }
@@ -58,9 +53,10 @@ ProcessConfig = pHelmIvP
 
     bhv_dir_not_found_ok = true
 
-    behaviors  = alpha.bhv
+    behaviors  = auv.bhv
     domain     = course:0:359:360
     domain     = speed:0:4:41
+    domain     = depth:0:200:201
 }
 
 //------------------------------------------
@@ -145,9 +141,9 @@ ProcessConfig = pNodeReporter
 
 
 
-ProcessConfig = pGobyCourseUSVManager
+ProcessConfig = pGobyCourseAUVManager
 {
-    vehicle_id: 1
+    vehicle_id: 2
 }
 
 ProcessConfig = iFrontSeat_basic_simulator
@@ -158,7 +154,7 @@ ProcessConfig = iFrontSeat_basic_simulator
         frontseat_connected_timeout: 10
         status_period: 5
         exit_on_error: false
-        type: USV
+        type: AUV
         [goby.middleware.frontseat.protobuf.basic_simulator_config] {  
             tcp_address: "127.0.0.1" 
             tcp_port: 54321 
@@ -184,7 +180,7 @@ ProcessConfig = pAcommsHandler
         verbosity: DEBUG2  show_gui: true
     }
 
-    modem_id: 2
+    modem_id: 3
     driver_cfg {
         driver_type: DRIVER_UDP_MULTICAST
         [goby.acomms.udp_multicast.protobuf.config] {  
@@ -196,7 +192,7 @@ ProcessConfig = pAcommsHandler
     mac_cfg {
         type: MAC_FIXED_DECENTRALIZED
         slot { src: 1 slot_seconds: 10 max_frame_bytes: 128 }
-        slot { src: 2 slot_seconds: 10 max_frame_bytes: 128 }
+        slot { src: 3 slot_seconds: 10 max_frame_bytes: 128 }
     }
 
     queue_cfg

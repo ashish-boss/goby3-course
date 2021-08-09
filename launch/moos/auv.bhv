@@ -1,0 +1,52 @@
+initialize   DEPLOY = true
+initialize   MOOS_MANUAL_OVERRIDE = false
+
+//----------------------------------------------
+Behavior = BHV_Waypoint
+{ 
+  name      = waypt_survey
+  pwt       = 100
+  condition = DEPLOY = true
+
+  updates    = WPT_UPDATE
+  perpetual  = true
+
+                lead = 8
+         lead_damper = 1
+       lead_to_start = true
+               speed = 1.5   // meters per second
+        capture_line = true
+      capture_radius = 5.0
+         slip_radius = 15.0
+	efficiency_measure = all
+
+             polygon = 134,33:96,56:72,94:62,137:65,182:79,224:102,262:136,291:176,310:219,323:255,347:285,380:314,414:342,449:372,482:402,515:434,547:469,575:505,601:544,623:585,641:628,653:672,662:715,674:753,698:788,724:827,747:856,780:857,824:848,867:838,911:824,954:807,995:787,1035:765,1074:742,1113:718,1151:694,1188:670,1226:664,1249:693,1216:721,1181:749,1146:775,1110:801,1073:825,1035:848,997:869,957:890,918:909,877:927,836:945,795:961,753:1000,737:1045,735:1089,737:1134,735:1179,736:1223,734:1264,717:1287,679:1284,635:1256,601:1218,576:1179,555:1140,532:1108,502:1100,459:1103,414:1096,370:1084,398:1076,442:1047,466:1017,433:989,401:1009,441:1029,480:997,494:954,484:911,470:870,452:829,435:789,417:773,375:755,334:729,298:692,273:652,254:610,237:568,222:526,207:484,193:442,177:401,159:361,138:329,107:299,73:265,45:223,31:178,28
+
+               order = normal
+               perpetual = true
+               repeat  = forever
+
+    visual_hints = nextpt_color=yellow
+    visual_hints = nextpt_vertex_size=8
+    visual_hints = nextpt_lcolor=gray70
+    visual_hints = vertex_color=dodger_blue, edge_color=white
+    visual_hints = vertex_size=5, edge_size=1
+}
+
+
+
+Behavior = BHV_ConstantDepth
+{
+   // General Behavior Parameters
+   // ---------------------------
+   name         = deploy_depth   // example
+   pwt          = 100                // default
+   condition    = DEPLOY = true 
+   duration     = no-time-limit   
+   // Parameters specific to this behavior
+   // ------------------------------------
+            basewidth = 100          // default
+                depth = 10
+            peakwidth = 3            // default
+          summitdelta = 50           // default
+}

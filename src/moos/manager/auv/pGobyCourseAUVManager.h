@@ -1,5 +1,5 @@
-#ifndef GOBY3_COURSE_MOOS_USV_MANAGER_H
-#define GOBY3_COURSE_MOOS_USV_MANAGER_H
+#ifndef GOBY3_COURSE_MOOS_AUV_MANAGER_H
+#define GOBY3_COURSE_MOOS_AUV_MANAGER_H
 
 #include "goby/moos/goby_moos_app.h"
 #include "goby/util/geodesy.h"
@@ -13,27 +13,24 @@ namespace goby3_course
 {
 namespace moos
 {
-class GobyCourseUSVManager : public goby::moos::GobyMOOSApp
+class GobyCourseAUVManager : public goby::moos::GobyMOOSApp
 {
   public:
-    static GobyCourseUSVManager* get_instance();
+    static GobyCourseAUVManager* get_instance();
     static void delete_instance();
 
   private:
-    GobyCourseUSVManager(protobuf::GobyCourseUSVManagerConfig& cfg);
-    ~GobyCourseUSVManager();
+    GobyCourseAUVManager(protobuf::GobyCourseAUVManagerConfig& cfg);
+    ~GobyCourseAUVManager();
 
     void loop() override;
 
     void subscribe_our_nav();
-    void subscribe_auv_nav();
-
     void handle_our_nav(const goby::middleware::frontseat::protobuf::NodeStatus& frontseat_nav);
-    void handle_auv_nav(const goby3_course::dccl::NavigationReport& dccl_nav);
 
   private:
-    protobuf::GobyCourseUSVManagerConfig& cfg_;
-    static GobyCourseUSVManager* inst_;
+    protobuf::GobyCourseAUVManagerConfig& cfg_;
+    static GobyCourseAUVManager* inst_;
 
     goby::util::UTMGeodesy geodesy_;
 };
