@@ -1,0 +1,4 @@
+#!/usr/bin/env -S goby_launch -s -P -k30 -pmoos -d1000 -L
+
+[kill=SIGTERM] pAntler auv.moos
+[kill=SIGTERM] pAntler topside.moos
