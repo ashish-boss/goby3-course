@@ -1,7 +1,0 @@
-deployment: stub
-platforms:
-  - name: vehicle
-    interfaces:
-      - @GOBY_INTERFACES_DIR@/goby_geov_interface_interface.yml
-
-      
