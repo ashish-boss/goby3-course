@@ -198,7 +198,7 @@ The Micro-Modem supports two data modes: the traditional (Micro-Modem 1) data pr
 
 Using the Goby ModemDriver this sequence looks like (from https://goby.software/3.0/md_doc103_acomms-driver.html):
 
-![](https://i.imgur.com/3TUFydA.png)
+![](mm-sequence.png)
 
 The number of commands and timing is too complicated to easily replicate on the command line manually.
 
@@ -231,12 +231,11 @@ You should see this message on /tmp/ttymm1 as a `$CARDP` message.
 #### Questions:
 
 - How many bytes are in a frame for each FDP packet for rate 1 and for rate 5?
-- How does the FDP mini-packet differ from the full packet? 
-
+- How does the FDP mini-packet differ from the full packet?
 
 In Goby, this transaction sequence looks like (from https://goby.software/3.0/md_doc103_acomms-driver.html):
 
-![](https://i.imgur.com/kZ6kE9r.png)
+![](mm-fdp-sequence.png)
 
 ### Using the goby_test_mmdriver1 test to understand the modem
 

@@ -7,6 +7,8 @@ DCCL message that we made yesterday and send it using pAcommsHandler and a very 
 
 Copy the code in `goby3-course/src/moos/pattern/` to a new directory (`goby3-course/src/moos/ctd`) and rename all the files and class names to `pGobyCourseCTDSim`.
 
+Also add your new directory to the `CMakeLists.txt` in `goby3-course/src/moos`.
+
 In the `loop()` method (called by `CMOOSApp::Iterate` at the AppTick frequency), generate a randomly populated CTD message using your DCCL message from yesterday and publish it (using `publish_pb`) to the MOOS variable "CTD_DATA_OUT".
 
 ## Update the moos mission
@@ -26,7 +28,7 @@ uMS
 
 ## Add to pAcommsHandler
 
-In the `ProcessConfig = pAcommsHandler` block of both `auv.moos` and `topside.moos`, add your new CTD message to the `queue_cfg` and `translator_entry` blocks. Use the "CTD_DATA_OUT" variable as the trigger and the "create" variable and the "CTD_DATA_IN" as the publish variable.
+In the `ProcessConfig = pAcommsHandler` block of both `auv.moos` and `topside.moos`, add your new CTD message to the `queue_cfg` and `translator_entry` blocks. Use the "CTD_DATA_OUT" variable as the "trigger" and the "create" variable and the "CTD_DATA_IN" as the "publish" variable.
 
 Some things to consider (which are often more important in a real system than in this simple example):
 
