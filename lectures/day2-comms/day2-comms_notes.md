@@ -499,7 +499,7 @@ Let's create two new threads and move our publisher/subscriber code over:
 
 ```cpp=
 
-using ThreadBase = goby::middleware::SimpleThread
+using ThreadBase = goby::middleware::SimpleThread<goby3_course::config::InterThread1>;
 
 namespace goby3_course
 {
